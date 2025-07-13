@@ -1,6 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, Star, Calendar, Navigation, Camera, CheckCircle, Circle } from 'lucide-react';
 
+// TypeScript interfaces
+interface Place {
+  id: number;
+  name: string;
+  category: string;
+  timeOfDay: string;
+  description: string;
+  rating: number;
+  visitTime: string;
+  tips: string;
+  visited: boolean;
+}
+
+interface City {
+  id: number;
+  name: string;
+  description: string;
+  visitDate: string;
+  stayDuration: string;
+  places: Place[];
+}
+
+interface TripInfo {
+  title: string;
+  duration: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface TravelData {
+  tripInfo: TripInfo;
+  cities: City[];
+}
+
 // Veri yapısı
 const travelData = {
   "tripInfo": {
@@ -222,10 +256,10 @@ const travelData = {
 };
 
 const TravelGuideApp = () => {
-  const [visitedPlaces, setVisitedPlaces] = useState({});
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [visitedPlaces, setVisitedPlaces] = useState<Record<number, boolean>>({});
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [currentView, setCurrentView] = useState('overview');
-  const [myNotes, setMyNotes] = useState({});
+  const [myNotes, setMyNotes] = useState<Record<number, string>>({});
 
   // LocalStorage'dan veri yükleme
   useEffect(() => {
@@ -241,22 +275,22 @@ const TravelGuideApp = () => {
   }, []);
 
   // Ziyaret durumunu toggle etme
-  const toggleVisited = (placeId) => {
+  const toggleVisited = (placeId: number) => {
     const newVisited = { ...visitedPlaces, [placeId]: !visitedPlaces[placeId] };
     setVisitedPlaces(newVisited);
     localStorage.setItem('visitedPlaces', JSON.stringify(newVisited));
   };
 
   // Not güncelleme
-  const updateNote = (placeId, note) => {
+  const updateNote = (placeId: number, note: string) => {
     const newNotes = { ...myNotes, [placeId]: note };
     setMyNotes(newNotes);
     localStorage.setItem('myNotes', JSON.stringify(newNotes));
   };
 
   // Kategori renkleri
-  const getCategoryColor = (category) => {
-    const colors = {
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
       'Tarihi Mekan': 'bg-amber-100 text-amber-800',
       'Plaj': 'bg-blue-100 text-blue-800',
       'Doğa': 'bg-green-100 text-green-800',
@@ -272,8 +306,8 @@ const TravelGuideApp = () => {
   };
 
   // Zaman dilimi renkleri
-  const getTimeColor = (timeOfDay) => {
-    const colors = {
+  const getTimeColor = (timeOfDay: string) => {
+    const colors: Record<string, string> = {
       'sabah': 'bg-yellow-50 border-yellow-200',
       'öğlen': 'bg-orange-50 border-orange-200',
       'akşam': 'bg-purple-50 border-purple-200'
@@ -385,12 +419,12 @@ const TravelGuideApp = () => {
   };
 
   // Şehir Detay Sayfası
-  const CityDetailPage = ({ city }) => {
+  const CityDetailPage = ({ city }: { city: City }) => {
     const morningPlaces = city.places.filter(place => place.timeOfDay === 'sabah');
     const noonPlaces = city.places.filter(place => place.timeOfDay === 'öğlen');
     const eveningPlaces = city.places.filter(place => place.timeOfDay === 'akşam');
 
-    const PlaceCard = ({ place }) => (
+    const PlaceCard = ({ place }: { place: Place }) => (
       <div className={`p-4 rounded-lg border-2 ${getTimeColor(place.timeOfDay)}`}>
         <div className="flex justify-between items-start mb-3">
           <div className="flex-1">
