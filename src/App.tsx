@@ -465,7 +465,7 @@ const TravelGuideApp = () => {
           value={myNotes[Number(place.id)] || ''}
           onChange={(e) => updateNote(Number(place.id), e.target.value)}
           className="w-full p-2 border rounded text-sm resize-none"
-          rows="2"
+          rows={2}
         />
       </div>
     );
