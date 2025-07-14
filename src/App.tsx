@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MapPin, Clock, Star, Calendar, Navigation, Camera, CheckCircle, Circle } from 'lucide-react';
 
 // TypeScript interfaces
@@ -36,7 +36,7 @@ interface TravelData {
 }
 
 // Veri yapısı
-const travelData = {
+const travelData: TravelData = {
   "tripInfo": {
     "title": "Ege Turu 2024",
     "duration": "7 gün",
@@ -440,10 +440,10 @@ const TravelGuideApp = () => {
             </div>
           </div>
           <button
-            onClick={() => toggleVisited(place.id)}
-            className={`p-1 rounded-full ${visitedPlaces[place.id] ? 'text-green-600' : 'text-gray-400'}`}
+            onClick={() => toggleVisited(Number(place.id))}
+            className={`p-1 rounded-full ${visitedPlaces[Number(place.id)] ? 'text-green-600' : 'text-gray-400'}`}
           >
-            {visitedPlaces[place.id] ? <CheckCircle className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
+            {visitedPlaces[Number(place.id)] ? <CheckCircle className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
           </button>
         </div>
         
@@ -462,8 +462,8 @@ const TravelGuideApp = () => {
         
         <textarea
           placeholder="Kişisel notlarınız..."
-          value={myNotes[place.id] || ''}
-          onChange={(e) => updateNote(place.id, e.target.value)}
+          value={myNotes[Number(place.id)] || ''}
+          onChange={(e) => updateNote(Number(place.id), e.target.value)}
           className="w-full p-2 border rounded text-sm resize-none"
           rows="2"
         />
